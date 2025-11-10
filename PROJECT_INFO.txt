@@ -1,0 +1,276 @@
+================================================================================
+NETBATCH VIEWER GUI - MODULAR EDITION
+================================================================================
+
+Repository Location:
+/nfs/site/disks/zsc7.xne_cnic.nss.050.18A_Expt/kushwaha/Python/nbflow_gui_v1/netbatch_viewer_modular
+
+Version: 2.0.0
+Date: November 10, 2024
+Author: Shyam Sunder Kushwaha (shyam.sunder.kushwaha@intel.com)
+
+================================================================================
+QUICK START
+================================================================================
+
+1. Navigate to repository:
+   cd /nfs/site/disks/zsc7.xne_cnic.nss.050.18A_Expt/kushwaha/Python/nbflow_gui_v1/netbatch_viewer_modular
+
+2. Run the application:
+   python3 netbatch_viewer_gui.py
+
+3. Check git status:
+   git status
+   git log
+
+================================================================================
+REPOSITORY STRUCTURE
+================================================================================
+
+netbatch_viewer_modular/
+├── .git/                           # Git repository
+├── .gitignore                      # Git ignore patterns
+├── README.md                       # Comprehensive documentation
+├── PROJECT_INFO.txt               # This file
+├── netbatch_viewer_gui.py         # Main application (124 lines)
+├── gui_data_provider.py           # Data provider module (199 lines)
+└── src/                           # Mixin modules directory
+    ├── __init__.py                # Package initialization (26 lines)
+    ├── uicomponents.py            # UI setup (200 lines, 6 functions)
+    ├── dataoperations.py          # Data operations (434 lines, 12 functions)
+    ├── taskactions.py             # Task actions (454 lines, 8 functions)
+    ├── popupwindows.py            # Popup windows (542 lines, 8 functions)
+    ├── fileoperations.py          # File operations (53 lines, 2 functions)
+    └── utils.py                   # Utilities (110 lines, 8 functions)
+
+Total: 1,943 lines of organized, maintainable code
+
+================================================================================
+GIT COMMANDS
+================================================================================
+
+View status:
+  git status
+
+View commit history:
+  git log
+  git log --oneline
+  git log --graph --all --oneline
+
+View changes:
+  git diff
+  git diff --staged
+
+Create a branch:
+  git branch feature-name
+  git checkout -b feature-name
+
+Switch branches:
+  git checkout branch-name
+
+Commit changes:
+  git add .
+  git commit -m 'Your commit message'
+
+View file history:
+  git log -- filename
+
+Undo changes:
+  git checkout -- filename          # Discard working changes
+  git reset HEAD filename           # Unstage file
+  git revert commit-hash           # Revert a commit
+
+================================================================================
+DEVELOPMENT WORKFLOW
+================================================================================
+
+1. Create feature branch:
+   git checkout -b feature/new-feature
+
+2. Make changes to appropriate mixin
+
+3. Test changes:
+   python3 netbatch_viewer_gui.py
+
+4. Commit changes:
+   git add .
+   git commit -m 'Add new feature: description'
+
+5. Merge back to master:
+   git checkout master
+   git merge feature/new-feature
+
+================================================================================
+MODULE RESPONSIBILITIES
+================================================================================
+
+UIComponentsMixin (src/uicomponents.py):
+  - setup_window()
+  - create_menu()
+  - create_toolbar()
+  - create_main_area()
+  - create_status_bar()
+  - create_tasks_tab()
+
+DataOperationsMixin (src/dataoperations.py):
+  - load_file()
+  - load_live_data()
+  - process_loaded_data()
+  - _apply_smart_status_logic()
+  - update_filter_dropdowns()
+  - on_feeder_changed()
+  - on_config_changed()
+  - on_block_changed()
+  - apply_filters()
+  - populate_table()
+  - sort_column()
+
+TaskActionsMixin (src/taskactions.py):
+  - open_ward()
+  - open_nbflow_gui()
+  - open_report_dir()
+  - open_stage_csv()
+  - open_log_viewer()
+  - view_qor_data()
+  - open_ndm()
+  - open_log()
+
+PopupWindowsMixin (src/popupwindows.py):
+  - show_job_details()
+  - _populate_status_tab()
+  - _populate_technical_tab()
+  - _populate_custom_tab()
+  - _populate_raw_tab()
+  - show_task_details()
+  - show_csv_viewer()
+  - show_about()
+
+FileOperationsMixin (src/fileoperations.py):
+  - export_to_csv()
+  - sort_csv_column()
+
+UtilsMixin (src/utils.py):
+  - clear_filters()
+  - refresh_view()
+  - update_status()
+  - on_refresh_interval_changed()
+  - parse_interval()
+  - start_auto_refresh()
+  - stop_auto_refresh()
+  - auto_refresh_callback()
+
+================================================================================
+MAINTENANCE
+================================================================================
+
+Adding new features:
+1. Identify appropriate mixin based on functionality
+2. Add method to mixin class
+3. Test thoroughly
+4. Commit with descriptive message
+
+Creating new mixin:
+1. Create new file in src/ (e.g., src/newmixin.py)
+2. Define mixin class with methods
+3. Add imports to src/__init__.py
+4. Add mixin to main class inheritance
+5. Test and commit
+
+Updating documentation:
+1. Update README.md for major changes
+2. Update module docstrings
+3. Update this file if structure changes
+4. Commit documentation changes
+
+================================================================================
+BACKUP AND ROLLBACK
+================================================================================
+
+The original monolithic version is preserved in parent directory:
+/nfs/site/disks/zsc7.xne_cnic.nss.050.18A_Expt/kushwaha/Python/nbflow_gui_v1/netbatch_viewer_gui.py
+
+Multiple backups available:
+- netbatch_viewer_gui.py.bak_final (1,616 lines - working monolithic)
+- netbatch_viewer_gui.py.bak_before_refactor (1,616 lines)
+- netbatch_viewer_gui.py.backup_20251109_063423.safe (2,381 lines - original)
+
+To rollback to any commit:
+  git log                           # Find commit hash
+  git checkout commit-hash          # View that version
+  git checkout master               # Return to latest
+
+To revert changes:
+  git revert commit-hash            # Create new commit reverting changes
+
+================================================================================
+TESTING CHECKLIST
+================================================================================
+
+Before committing major changes:
+☐ GUI launches successfully
+☐ All menu items functional
+☐ Toolbar filters work
+☐ File loading works
+☐ Live data loading works
+☐ Filter cascading works
+☐ Table population correct
+☐ Column sorting functional
+☐ Task actions work
+☐ Popups display correctly
+☐ CSV export functional
+☐ Auto-refresh works
+☐ No syntax errors (python3 -m py_compile *.py src/*.py)
+
+================================================================================
+TROUBLESHOOTING
+================================================================================
+
+Import errors:
+  - Ensure you're in the correct directory
+  - Check PYTHONPATH includes current directory
+  - Verify src/__pycache__ doesn't have stale bytecode: rm -rf src/__pycache__
+
+GUI doesn't launch:
+  - Check Python version: python3 --version (need >= 3.8)
+  - Verify tkinter installed: python3 -c "import tkinter"
+  - Check pandas installed: python3 -c "import pandas"
+
+Git issues:
+  - Check you're in correct directory: pwd
+  - Verify .git exists: ls -la
+  - Check branch: git branch
+  - View untracked files: git status
+
+================================================================================
+PERFORMANCE METRICS
+================================================================================
+
+Code Organization:
+- Monolithic version: 1,616 lines (1 file)
+- Modular version: 1,943 lines (8 files)
+- Main file reduction: 92% (1,616 → 124 lines)
+- Average module size: 270 lines
+- Total functions: 45 (organized into 6 categories)
+
+Benefits:
+- Better organization
+- Easier maintenance
+- Improved readability
+- Clear separation of concerns
+- Easier testing
+- Flexible architecture
+- Scalable design
+
+================================================================================
+CONTACT
+================================================================================
+
+For questions, issues, or contributions:
+  Email: shyam.sunder.kushwaha@intel.com
+
+For git repository issues:
+  Location: /nfs/site/disks/zsc7.xne_cnic.nss.050.18A_Expt/kushwaha/Python/nbflow_gui_v1/netbatch_viewer_modular
+
+================================================================================
+END OF PROJECT INFO
+================================================================================
