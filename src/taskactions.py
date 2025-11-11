@@ -307,8 +307,8 @@ class TaskActionsMixin:
 
 
 
-    def open_ndm(self, task):
-        """Open NDM - xterm in ward area with sourced environment."""
+    def load_design_for_review(self, task):
+        """Load Design for Review - xterm in ward area with sourced environment."""
         task_id = task.get('TaskID', 'N/A')
         wardarea = task.get('CA_ward', '')
         block = task.get('CA_block', '')
@@ -317,8 +317,8 @@ class TaskActionsMixin:
         nb_pool = task.get('CA_nb_pool', '')
         nb_qslot = task.get('CA_nb_qslot', '')
         nb_class = task.get('CA_nb_class', '')
-        logger.info(f"=== Opening NDM for task {task_id} ===")
-        self.update_status(f"Opening NDM for task {task_id}...", "info")
+        logger.info(f"=== Loading Design for Review for task {task_id} ===")
+        self.update_status(f"Loading Design for Review for task {task_id}...", "info")
         # Log all task attributes
         logger.info(f"Task attributes:")
         logger.info(f"  CA_ward: {wardarea}")
@@ -375,13 +375,63 @@ class TaskActionsMixin:
             # Execute and capture process info
             process = subprocess.Popen(cmd)
             logger.info(f"subprocess.Popen executed successfully, PID: {process.pid}")
-            self.update_status(f"Opened NDM terminal for task {task_id}", "success")
-            logger.info(f"Successfully opened NDM terminal for task {task_id} in {wardarea}")
-            logger.info(f"=== NDM open completed ===")
+            self.update_status(f"Opened design review terminal for task {task_id}", "success")
+            logger.info(f"Successfully opened design review terminal for task {task_id} in {wardarea}")
+            logger.info(f"=== Design load completed ===")
         except Exception as e:
-            error_msg = f"Failed to open NDM terminal: {str(e)}"
+            error_msg = f"Failed to load design terminal: {str(e)}"
             messagebox.showerror("Error", error_msg)
     
+
+
+    def run_interactively(self, task):
+        """Run task interactively in ward area."""
+        task_id = task.get('TaskID', 'N/A')
+        wardarea = task.get('WardArea', '')
+        block = task.get('Block', '')
+        
+        if not wardarea:
+            messagebox.showerror("Error", "Ward area not found for this task")
+            return
+            
+        logger.info(f"=== Running interactively for task {task_id} ===")
+        self.update_status(f"Opening interactive session for task {task_id}...", "info")
+        
+        try:
+            # Get netbatch info
+            nb_pool = task.get('CA_nb_pool', 'xsjl7lsfcv221')
+            nb_qslot = task.get('NBQSlot', '/qslot/xne_cnic/cnic')
+            nb_class = task.get('NBClass', 'OR||1h@1gb')
+            
+            # Get task details
+            tech = task.get('CA_tech', '')
+            flow = task.get('CA_flow', '')
+            stage = task.get('Stage', '')
+            design = task.get('CA_design', block)
+            
+            # Check for setup file
+            setup_file = f"{wardarea}/.dm_setup.tcsh"
+            
+            if os.path.exists(setup_file):
+                # Construct interactive nbjob command
+                nbjob_cmd = f'nbjob run --target {nb_pool} --qslot {nb_qslot} --class "{nb_class}" xterm -T "Interactive: {block}"'
+                tcsh_cmd = f'cd {wardarea} && source {setup_file} && echo "Starting interactive session for {block}" && {nbjob_cmd}'
+            else:
+                tcsh_cmd = f'cd "{wardarea}" && echo "Interactive session for {block}" && echo "Setup not found: {setup_file}"'
+            
+            # Launch xterm
+            cmd = ['xterm', '-T', f'Interactive: {block}', '-e', f'/bin/tcsh -c "{tcsh_cmd}; /bin/tcsh"']
+            
+            subprocess.Popen(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            
+            self.update_status(f"Opened interactive session for task {task_id}", "success")
+            logger.info(f"Successfully opened interactive session for task {task_id}")
+            logger.info(f"=== Interactive session started ===")
+        except Exception as e:
+            error_msg = f"Failed to open interactive session: {str(e)}"
+            logger.error(error_msg)
+            messagebox.showerror("Error", error_msg)
+            self.update_status(error_msg, "error")
 
     def open_log(self, task):
         """Open log file in gvim after sourcing environment in xterm."""

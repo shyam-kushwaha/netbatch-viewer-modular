@@ -324,16 +324,26 @@ Total Fields Available: {len(task.index)}
             ("Job Details", lambda: self.show_job_details(task, popup)),
             ("Open Ward", lambda: self.open_ward(task)),
             ("Open Log", lambda: self.open_log(task)),
-            ("Open NDM", lambda: self.open_ndm(task)),
+            ("Load Design for Review", lambda: self.load_design_for_review(task)),
             ("Open Report Dir", lambda: self.open_report_dir(task)),
             ("Open Stage CSV", lambda: self.open_stage_csv(task)),
             ("Open Log Viewer", lambda: self.open_log_viewer(task)),
             ("View QOR Data", lambda: self.view_qor_data(task)),
             ("Open NBflow GUI", lambda: self.open_nbflow_gui(task))
         ]
+        # Add new Run Interactively button after Load Design
+        buttons_info.insert(6, ("Run Interactively", lambda: self.run_interactively(task)))
+        
+        # Arrange buttons in 2 columns
         for idx, (btn_text, btn_command) in enumerate(buttons_info):
-            btn = ttk.Button(button_frame, text=btn_text, command=btn_command, width=30)
-            btn.pack(pady=5, fill=tk.X)  # Vertical stacking        
+            row = idx // 2
+            col = idx % 2
+            btn = ttk.Button(button_frame, text=btn_text, command=btn_command, width=25)
+            btn.grid(row=row, column=col, padx=5, pady=5, sticky='ew')
+        
+        # Configure column weights for equal distribution
+        button_frame.columnconfigure(0, weight=1)
+        button_frame.columnconfigure(1, weight=1)        
         # Details frame with scrollbar
         details_frame = ttk.LabelFrame(main_frame, text="Task Information", padding=10)
         details_frame.pack(fill=tk.BOTH, expand=True)
