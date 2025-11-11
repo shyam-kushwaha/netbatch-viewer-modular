@@ -1,3 +1,6 @@
+#!/usr/intel/pkgs/python3/3.13.2/bin/python3
+import UsrIntel.R1
+
 """
 Netbatch Viewer GUI - Modular Components
 Author: Shyam Sunder Kushwaha

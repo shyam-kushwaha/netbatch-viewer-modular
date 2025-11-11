@@ -1,5 +1,0 @@
-2025-11-10 21:51:06,106 - __main__ - INFO - Netbatch Viewer GUI initialized
-2025-11-10 21:51:06,120 - src.dataoperations - INFO - Loading data via Netbatch API
-2025-11-10 21:51:07,770 - src.dataoperations - INFO - Smart status logic applied: 765 tasks had status updated
-2025-11-10 21:51:08,480 - src.dataoperations - INFO - Successfully loaded 7438 tasks via API
-2025-11-10 21:53:15,155 - src.taskactions - INFO - Successfully opened ward terminal for task 40667 in /nfs/site/disks/mmg800a0_bsr_1/kushwaha/bsr_top_r19_postdft_ccd_ww45.6_2025

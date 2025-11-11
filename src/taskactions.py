@@ -1,3 +1,6 @@
+#!/usr/intel/pkgs/python3/3.13.2/bin/python3
+import UsrIntel.R1
+
 """
 Task Actions - Actions performed on tasks
 """
@@ -10,6 +13,13 @@ import logging
 import pandas as pd
 from datetime import datetime
 from typing import Optional, Dict, List, Any
+import subprocess
+import tempfile
+import threading
+import http.server
+import socketserver
+import webbrowser
+
 
 logger = logging.getLogger(__name__)
 

@@ -1,3 +1,6 @@
+#!/usr/intel/pkgs/python3/3.13.2/bin/python3
+import UsrIntel.R1
+
 """
 Popup Windows - Dialog windows and popups
 """
@@ -385,29 +388,6 @@ Flow:            {task.get('CA_flow', 'N/A')}
         popup.update_idletasks()  # Make sure window is fully created
         popup.grab_set()
         print("DEBUG: Popup window with buttons created and displayed")
-        if not ca_ward or not block or not tech or not flow:
-            messagebox.showerror("Error", f"Missing required fields (CA_ward, CA_block, CA_tech, CA_flow) for task {task_id}")
-            logger.error(f"Missing required fields for task {task_id}")
-            return
-        # Construct report directory path: CA_ward/runs/CA_block/CA_tech/CA_flow/reports
-        ca_ward = ca_ward.rstrip('/.')
-        report_dir = f"{ca_ward}/runs/{block}/{tech}/{flow}/reports/{stage}"
-        if not os.path.exists(report_dir):
-            messagebox.showerror("Error", f"Report directory does not exist: {report_dir}")
-            logger.error(f"Report directory does not exist: {report_dir}")
-            return
-        try:
-            # Open xterm in the report directory
-            cmd = ['xterm', '-T', f'Reports: {block}/{tech}/{flow}', '-e', f'cd "{report_dir}" && tcsh']
-            subprocess.Popen(cmd)
-            self.update_status(f"Opened report directory for task {task_id}", "success")
-            logger.info(f"Successfully opened report directory for task {task_id}: {report_dir}")
-        except Exception as e:
-            error_msg = f"Failed to open report directory: {str(e)}"
-            messagebox.showerror("Error", error_msg)
-            logger.error(f"Failed to open report directory for task {task_id}: {str(e)}")
-            self.update_status("Failed to open report directory", "error")
-
     def show_csv_viewer(self, csv_file: str, title: str = "CSV Viewer"):
         """Display CSV file in a built-in viewer window."""
         import csv
