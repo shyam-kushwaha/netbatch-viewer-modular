@@ -327,7 +327,7 @@ Total Fields Available: {len(task.index)}
             ("Job Details", lambda: self.show_job_details(task, popup)),
             ("Open Ward", lambda: self.open_ward(task)),
             ("Open Log", lambda: self.open_log(task)),
-            ("Load Design for Review", lambda: self.load_design_for_review(task)),
+            ("Load Design for Review", lambda: self._show_load_design_popup(task)),
             ("Open Report Dir", lambda: self.open_report_dir(task)),
             ("Open Stage CSV", lambda: self.open_stage_csv(task)),
             ("Open Log Viewer", lambda: self.open_log_viewer(task)),

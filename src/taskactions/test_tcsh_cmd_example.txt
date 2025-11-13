@@ -1,0 +1,44 @@
+===============================================================================
+EXAMPLE TCSH COMMAND FROM _show_load_design_popup.py (line 271)
+===============================================================================
+
+The actual command that gets executed in xterm:
+
+cd {wardarea} && \
+echo "" && \
+echo "=== Setup File Info ===" && \
+echo "Original: {original_setup_file}" && \
+echo "Using: {setup_file_to_use}" && \
+echo "" && \
+source {setup_file_to_use} && \
+echo "" && \
+echo "Running Design Review Command: {nbjob_cmd}" && \
+{nbjob_cmd} && \
+sleep 120 && \
+sleep 120 && \
+echo "" && \
+{script_path} ; \
+set stat = $status ; \
+rm -f {script_path} ; \
+echo "" && \
+echo ""
+
+===============================================================================
+KEY ACTIONS:
+===============================================================================
+1. cd {wardarea}                      - Change to ward directory
+2. source {setup_file_to_use}         - Source the modified setup file with new FC version
+3. {nbjob_cmd}                        - Run NetBatch design review command
+4. sleep 240                          - Wait 4 minutes
+5. {script_path}                      - Execute cleanup script
+6. rm -f {script_path}                - Remove script
+
+===============================================================================
+TO TEST SOURCING THE SETUP FILE:
+===============================================================================
+
+Create a simple test:
+
+xterm -e 'cd /your/wardarea && source /path/to/setup/file.csh && echo "FC: $FUSIONCOMPILER_DIR" && sleep 5'
+
+This will open xterm, source the file, display the FC directory, and wait 5 seconds.
