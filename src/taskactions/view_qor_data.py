@@ -54,7 +54,10 @@ class TaskActionsMixin:
             return
         
         # Build QOR report path: <ward>/runs/<block><tech>/<flow>/Qor_sum_reports/compare_qor_data
-        qor_path = os.path.join(wardarea, "runs", block,tech, flow, "Qor_sum_reports", "compare_qor_data")
+        #qor_path = os.path.join(wardarea, "runs", block,tech, flow, "Qor_sum_reports", "compare_qor_data")
+        # Build QOR report path: <ward>/runs/<block><tech>/<flow>/Qor_sum_reports/write_qor_data
+        qor_path = os.path.join(wardarea, "runs", block,tech, flow, "Qor_sum_reports", "write_qor_data")
+
         
         logger.info(f"QOR path: {qor_path}")
         

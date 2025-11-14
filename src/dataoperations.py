@@ -58,7 +58,9 @@ class DataOperationsMixin:
             logger.info("Loading data via Netbatch API")
             
             # Use API-based data provider instead of subprocess
-            self.df = self.data_provider.get_tasks_for_gui(username=None)
+            # Get current username
+            username = os.getenv('USER') or os.getenv('USERNAME')
+            self.df = self.data_provider.get_tasks_for_gui(username=username)
             
             if self.df.empty:
                 messagebox.showwarning("No Data", "No tasks found")
@@ -270,12 +272,20 @@ class DataOperationsMixin:
                 self.filters['config'].set('All Configs')
         
         # Update blocks dropdown
-        if 'Block' in self.df.columns:
-            blocks = ['All Blocks'] + sorted(filtered_df['Block'].dropna().unique().tolist())
+        if 'CA_block' in filtered_df.columns:
+            blocks = ['All Blocks'] + sorted(filtered_df['CA_block'].dropna().unique().tolist())
             current_block = self.filters['block'].get()
             self.block_combo['values'] = blocks
             if current_block not in blocks:
                 self.filters['block'].set('All Blocks')
+        
+        # Update status dropdown
+        if 'Status' in filtered_df.columns:
+            statuses = ['All Status'] + sorted(filtered_df['Status'].dropna().unique().tolist())
+            current_status = self.filters['status'].get()
+            self.status_combo['values'] = statuses
+            if current_status not in statuses:
+                self.filters['status'].set('All Status')
         
         # Apply filters
         self.apply_filters()
@@ -302,7 +312,10 @@ class DataOperationsMixin:
             filtered_df = filtered_df[filtered_df['Config'] == selected_config]
         
         # Update blocks dropdown
-        blocks = ['All Blocks'] + sorted(filtered_df['Block'].dropna().unique().tolist())
+        if 'CA_block' in filtered_df.columns:
+            blocks = ['All Blocks'] + sorted(filtered_df['CA_block'].dropna().unique().tolist())
+        else:
+            blocks = ['All Blocks']
         current_block = self.filters['block'].get()
         self.block_combo['values'] = blocks
         
@@ -310,11 +323,48 @@ class DataOperationsMixin:
         if current_block not in blocks:
             self.filters['block'].set('All Blocks')
         
+        # Update status dropdown
+        if 'Status' in filtered_df.columns:
+            statuses = ['All Status'] + sorted(filtered_df['Status'].dropna().unique().tolist())
+            current_status = self.filters['status'].get()
+            self.status_combo['values'] = statuses
+            if current_status not in statuses:
+                self.filters['status'].set('All Status')
+        
         # Apply filters
         self.apply_filters()
 
     def on_block_changed(self):
-        """Handle block selection change - just apply filters."""
+        """Handle block selection change - update status dropdown and apply filters."""
+        if self.df is None:
+            return
+        
+        # Check if columns exist
+        if 'Status' not in self.df.columns:
+            self.apply_filters()
+            return
+        
+        selected_feeder = self.filters['feeder'].get()
+        selected_config = self.filters['config'].get()
+        selected_block = self.filters['block'].get()
+        
+        # Filter data based on feeder, config, and block
+        filtered_df = self.df
+        if selected_feeder != 'All Feeders' and 'Feeder' in self.df.columns:
+            filtered_df = filtered_df[filtered_df['Feeder'] == selected_feeder]
+        if selected_config != 'All Configs' and 'CA_configid' in self.df.columns:
+            filtered_df = filtered_df[filtered_df['CA_configid'] == selected_config]
+        if selected_block != 'All Blocks' and 'CA_block' in self.df.columns:
+            filtered_df = filtered_df[filtered_df['CA_block'] == selected_block]
+        
+        # Update status dropdown
+        statuses = ['All Status'] + sorted(filtered_df['Status'].dropna().unique().tolist())
+        current_status = self.filters['status'].get()
+        self.status_combo['values'] = statuses
+        if current_status not in statuses:
+            self.filters['status'].set('All Status')
+        
+        # Apply filters
         self.apply_filters()
 
     def apply_filters(self):

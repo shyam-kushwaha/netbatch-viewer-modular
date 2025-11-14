@@ -28,7 +28,7 @@ from typing import Optional, Dict, List, Any
 from datetime import datetime
 import pandas as pd
 
-from gui_data_provider import GUIDataProvider
+from netbatch_data_extractor import netbatch_data_extractor
 
 logging.basicConfig(
     level=logging.INFO,
@@ -76,7 +76,7 @@ class NetbatchViewerGUI(
         """Initialize the GUI application."""
         self.root = root
         self.df: Optional[pd.DataFrame] = None
-        self.data_provider = GUIDataProvider()  # API-based data provider
+        self.data_provider = netbatch_data_extractor()  # API-based data provider
         self.filtered_df: Optional[pd.DataFrame] = None
         self.current_file: Optional[str] = None
         # Filter state
